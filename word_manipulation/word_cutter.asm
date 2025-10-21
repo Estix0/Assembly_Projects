@@ -1,36 +1,32 @@
 section .data
-  result db " ", 10
-  opener db "Napisz slowo do skrocenia:  ", 10
-  opener_len equ $-opener
-
-section .bss
-  input: resb 64
+  napis: db "Napis", 0
 
 section .text 
   global _start
 
 _start:
 
-  mov eax, 4
-  mov ebx, 1
-  mov ecx, opener
-  mov edx, opener_len
-  int 0x80
+  mov esi, napis
+  xor edx, edx
 
-  mov eax, 3
-  mov ebx, 0
-  mov ecx, input
-  mov edx, 64
-  int 0x80
+  counter:
+  mov al, [esi]
+  cmp al, 0
+  jz counter_end
 
-  xor esi, esi
+  inc esi
+  inc edx
 
-  
-  mov eax, 4
+  jmp counter
+  counter_end:
+
+  mov [esi-1], 0
+
+  mov eax, 4 ;sys write
   mov ebx, 1  
-  mov ecx, input 
+  mov ecx, napis 
   int 0x80
 
-  mov eax, 1
+  mov eax, 1 ;end program
   mov ebx, 0
   int 0x80

@@ -12,29 +12,36 @@ _start:
   xor edx, edx
   mov esi, napis
 
-  counter:
+  push_to_stack:
   mov al, [esi]
   cmp al, 0
-  jz counter_end
+  jz push_to_stack_end
+
+  movzx eax, al
+  push eax
+
   inc esi
   inc edx
-  jmp counter
-  counter_end:
-  
-  dec esi
-  mov edi, reversed
+
+  jmp push_to_stack
+  push_to_stack_end:
+
+  mov esi, reversed
   mov ecx, edx
 
-  reverse:
+  pull_from_stack:
   cmp ecx, 0
-  jz reverse_end
-  mov al, [esi]
-  mov [edi], al
-  dec esi
-  inc edi
+  jz pull_from_stack_end
+
+  pop eax
+  mov [esi], al
+
+  inc esi
   dec ecx
-  jmp reverse
-  reverse_end:
+
+  jmp pull_from_stack
+  pull_from_stack_end:
+
 
   mov eax, 4 ;printf
   mov ebx, 1 
